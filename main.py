@@ -19,7 +19,7 @@ def hierarchy_pos(G, root, width=1., vert_gap = 0.2, vert_loc = 0, xcenter = 0.5
 	neighbors = list(G.neighbors(root)) 
 	if parent != None:   #this should be removed for directed graphs.
 		neighbors.remove(parent)  #if directed, then parent not in neighbors.
-		if len(neighbors)!=0:
+	if len(neighbors)!=0:
 		dx = width/len(neighbors) 
 		nextx = xcenter - width/2 - dx/2
 		for neighbor in neighbors:
@@ -33,6 +33,7 @@ def gen_sommet():
 		\brief : cree un arbre de 10 a 15 sommets, dont chacun a un poids de -10 à 10
 		\param : None
 		\return : un arbre
+		\complex : 
 	"""
 	G=nx.Graph()
 	n_sommets = random.randint(10,15) #genere entre 10 et 15 sommets
@@ -44,7 +45,7 @@ def gen_sommet():
 	
 def gen_max(i):
 	voisins = list(G.neighbors(i))
-	print(i, end='   ')
+	print(i, end=' ')
     
 	if i != 1:
 		print(voisins[1:])
@@ -55,14 +56,24 @@ def gen_max(i):
 		for j in voisins:
 			gen_max(j)
 
+def delete_node(G,N):
+	"""
+		\brief : supprime un noeud et tous ses voisins sauf son père. Si c'est une feuille, supprme uniquement la feuille
+		\param : l'arbre, un noeud
+		\return : l'arbre amputé du noeud et de ses éventuels fils
+		\complex : 
+	"""
+	fils = list(G.neighbors(N))[1:]
+	for i in fils:
+		G.delete_node(i)
+	
+	return G
+
 ##########################################################################################################
 
 
 G = gen_sommet()       
 pos = hierarchy_pos(G,1)
-print(type(G))
-
-gen_max(1)
 
 nx.draw(G, pos=pos, with_labels=False)
 node_labels = nx.get_node_attributes(G,'weight')
