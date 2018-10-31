@@ -10,12 +10,21 @@ import random
 
 #########################################################################################################
 
-def hierarchy_pos(G, root, width=1., vert_gap = 0.2, vert_loc = 0, xcenter = 0.5, pos = None, parent = None):
+def hierarchy_pos(G, root, second = False, width=1., vert_gap = 0.2, vert_loc = 0, xcenter = 0.5, pos = None, parent = None):
+	"""
+		\brief :
+		\param :
+		\return :
+		\complex :
+	"""
+	#ajuste le décalage si on est dans le second arbre
+	if second: dec = 1.2
+	else: dec = 0
+		
 	if pos == None:
-		#pos = {G.node[root]['weight']:(xcenter,vert_loc)}
-		pos = {root:(xcenter,vert_loc)}
+		pos = {root:(dec+xcenter,vert_loc)}
 	else:
-		pos[root] = (xcenter, vert_loc)
+		pos[root] = (dec+xcenter, vert_loc)
 	neighbors = list(G.neighbors(root)) 
 	if parent != None:   #this should be removed for directed graphs.
 		neighbors.remove(parent)  #if directed, then parent not in neighbors.
@@ -24,7 +33,7 @@ def hierarchy_pos(G, root, width=1., vert_gap = 0.2, vert_loc = 0, xcenter = 0.5
 		nextx = xcenter - width/2 - dx/2
 		for neighbor in neighbors:
 			nextx += dx
-			pos = hierarchy_pos(G,neighbor, width = dx, vert_gap = vert_gap, vert_loc = vert_loc-vert_gap, xcenter=nextx, pos=pos, parent = root)                       
+			pos = hierarchy_pos(G,neighbor, second, width = dx, vert_gap = vert_gap, vert_loc = vert_loc-vert_gap, xcenter=nextx, pos=pos, parent = root)                       
 	return pos
 
 
@@ -106,19 +115,21 @@ def max_subtree(i, node_labels, somme_des_fils, G):
 	
 
 ##########################################################################################################
+  
 
-G = gen_sommet()   
-
+#arbre initial
+G = gen_sommet()
 pos = hierarchy_pos(G,1)
 nx.draw(G, pos=pos, with_labels=False)
 node_labels = nx.get_node_attributes(G,'weight')
 nx.draw_networkx_labels(G, pos, labels = node_labels) #affiche les poids a la place des noms
-plt.show()
 
-G = max_subtree(1, node_labels, {}, G)
 
-pos = hierarchy_pos(G,1)
+#arbre recoupé
+G = max_subtree(1, node_labels, {}, G) # REDUCTION DE L'ARBRE
+pos = hierarchy_pos(G,1,True)
 nx.draw(G, pos=pos, with_labels=False)
 node_labels = nx.get_node_attributes(G,'weight')
 nx.draw_networkx_labels(G, pos, labels = node_labels) #affiche les poids a la place des noms
-plt.show()
+
+plt.show() #affichage
