@@ -1,0 +1,53 @@
+\documentclass[a4paper]{report}
+
+\usepackage[utf8]{inputenc} 
+\usepackage[T1]{fontenc}      
+\usepackage[french]{babel}
+\usepackage[top=2cm, bottom=3cm, left=2.5cm, right=2.5cm]{geometry}
+\usepackage{makeidx}
+\usepackage{lmodern}
+\usepackage{graphicx}
+\usepackage{titlesec}
+\usepackage{titletoc}
+\renewcommand\thesection{\arabic{section}}
+
+\titleclass{\part}{top}
+\titleformat{\part}[display]{\normalfont\huge\bfseries}{\centering}{20pt}{\Huge\centering}
+\titlespacing*{\part}{0pt}{0pt}{30pt}
+
+
+\title{Rapport Projet 1 \\ INFO-F-203}
+\author{Antoine \bsc{Lemahieu}, 457582 \\
+Tristan \bsc{Philips}, 425461}
+\date{\today}
+\makeindex
+
+\setcounter{secnumdepth}{0} % pas de numéro de section
+
+\begin{document}
+\maketitle
+\renewcommand{\contentsname}{Sommaire}
+\tableofcontents
+\part{Arbres}
+\section{Choix des librairies utilisées}
+Par soucis de facilité, nous avons décidé d'utiliser les librairies Networkx et Matplotlib. L'une servant servant à créer l'arbre, composés de ses différents noeuds, l'autre à l'afficher. La librairie random a bien évidemment été utilisée afin de générer des arbres aléatoires de manière à pouvoir tester une multitude de cas différents.
+\\Pour optimiser la présentation de l'arbre, nous avons utilisé une fonction trouvée sur internet \cite{hierarchypos}, qui a ensuite été modifiée partiellement par nos soins. Celle-ci renvoie un dictionnaire où chaque noeud à une position x et y associée.
+\section{Choix d'implémentation faits et fonctionnement du programme}
+Afin d'éliminer au fur et à mesure les feuilles et sous arbres contribuant à faire baisser le poids total de l'arbre, il nous a semblé évident d'effectuer un parcourt en post ordre. Un tel chemin consiste à parcourir les fils de gauche à droite, puis le père. Il est ainsi aisé de visiter toutes les feuilles, d'éliminer celles ayant un poids négatif et d'ensuite aditionner le poids des feuilles restantes (qui sont positifs donc) au poids du père. Si l'ensemble est positif, on laisse tel quel et on le considère dans la suite du code comme étant une simple feuille dont le poids correspond à la somme du poids ses feuilles et de lui même. Si l'ensemble est négatif, on élimine le noeud ainsi que tous ses fils. On fait ceci de manière récursive sur l'ensemble des l'arbre.
+\begin{figure}[!h]
+\begin{center}
+\includegraphics{postorder.png}
+\caption{Exemple d'un parcourt en post ordre \cite{postorder}}
+\end{center}
+\end{figure}
+\\En vue de générer un arbre non binaire, nous avons créé une fonction gen\_sommet, qui génère aléatoirement entre 10 et 15 sommets de poids allant de -5 à 10. Pour ce faire, à chaque itération de la boucle principale, le nouveau sommet se rattache alétoirement à un sommet déjà existant. Le deuxième à être créé se liera forcément avec le premier, mais le troisième sera, par exemple, soit le fils du second, soit le fils de la racine (et frère du second). Et ainsi de suite. Nous avons pas mis de condition à cette fonction, il se peut donc que des cas dégénérés (bien que rares) surviennent , tel qu'une racine avec 10 fils, une profondeur d'arbre de 10, ect...
+\\on explique gen sommet et aux autres fonctions vite fait bien fait
+\section{Complexité des fonctions importées et max\_subtree}
+\part{Graphes}
+\section{Section 1}
+\part{Conclusion}
+\section{about Random}
+
+\bibliographystyle{unsrt}
+\bibliography{bibli}
+\end{document}
