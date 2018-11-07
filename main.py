@@ -37,7 +37,7 @@ def hierarchy_pos(G, root, second = False, width=1., vert_gap = 0.2, vert_loc = 
 	return pos
 
 
-def gen_sommet():
+def gen_tree():
 	"""
 		\brief : cree un arbre de 10 a 15 sommets, dont chacun a un poids de -10 à 10
 		\param : None
@@ -69,6 +69,12 @@ def delete_node(G,N):
 	
 
 def sous_somme(voisins, somme_des_fils, dec):
+	"""
+		\brief : somme les valeurs des fils afin d'avoir la valeur totale du sous-arbre
+		\param : liste des voisins, dictionnaire de tous les noeuds, décalage (0 si racine, 1 sinon)
+		\return : la somme calculée
+		\complex : O(nombre de voisins)
+	"""
 	somme = 0
 	for i in voisins[dec:]:
 		somme += somme_des_fils[i]
@@ -77,6 +83,12 @@ def sous_somme(voisins, somme_des_fils, dec):
 	
 
 def max_subtree(i, node_labels, somme_des_fils, G):
+	"""
+		\brief :
+		\param :
+		\return :
+		\complex :
+	"""
 	voisins = list(G.neighbors(i))
 	if i != 1:
 		for j in range(len(voisins)-1):
@@ -113,12 +125,59 @@ def max_subtree(i, node_labels, somme_des_fils, G):
 	return G
 	
 	
+	
+	
+def incidence_graph(hyper_graph, n_sommets, n_hyper_aretes):
+	"""
+		\brief : graphe d'incidence de l'hyper-graphe
+		\param : dictionnaire de l'hyper-graphe, nombre de sommets, nombre d'hyper arêtes
+		\return : graphe, position des noeuds
+		\complex : O(nombre de sommets + nombre d'hyper arêtes
+	"""
+	G = nx.Graph()
+	pos = {}
+	
+	for i in range(n_sommets + n_hyper_aretes):
+		if i < n_sommets:
+			pos[i+1] = (0.0, -0.5*i)
+			G.add_node(i+1, number = i+1)
+		else:
+			pos[i+1] = (0.05, -0.5*(i-n_sommets))
+			G.add_node(i+1, number = i-n_sommets+1)
+
+	for i in range(n_sommets):
+		for j in hyper_graph[i]:
+			G.add_edge(i+1, j+n_sommets+1)
+
+	return G, pos
+	
+
+	
+def gen_hyper_graph():
+	"""
+		\brief : génère un hyper-graphe aléatoire
+		\param : /
+		\return : dictionnaire de l'hyper-graphe, nombre de sommets, nombre d'arêtes
+		\complex : O(nombre de sommets * nombre d'hyper-arêtes)
+	"""
+	n_sommets = random.randint(5,15)
+	n_hyper_aretes = random.randint(3,5)
+	hyper_graph = {}
+
+	for i in range(n_sommets):
+		aretes = []
+		for j in range(n_hyper_aretes):
+			if random.randint(0,1):
+				aretes.append(j)
+		hyper_graph[i] = aretes
+		
+	return hyper_graph, n_sommets, n_hyper_aretes
 
 ##########################################################################################################
   
 
 #arbre initial
-G = gen_sommet()
+G = gen_tree()
 pos = hierarchy_pos(G,1)
 nx.draw(G, pos=pos, with_labels=False)
 node_labels = nx.get_node_attributes(G,'weight')
@@ -133,3 +192,14 @@ node_labels = nx.get_node_attributes(G,'weight')
 nx.draw_networkx_labels(G, pos, labels = node_labels) #affiche les poids a la place des noms
 
 plt.show() #affichage
+
+
+hyper_graph, n_sommets, n_hyper_aretes = gen_hyper_graph()
+print(hyper_graph)
+G, pos = incidence_graph(hyper_graph, n_sommets, n_hyper_aretes)
+nx.draw(G, pos=pos, with_labels=False)
+node_labels = nx.get_node_attributes(G,'number')
+nx.draw_networkx_labels(G, pos, labels = node_labels) #affiche les poids a la place des noms
+
+plt.show()
+
