@@ -34,12 +34,12 @@ def gen_tree():
 		\brief : cree un arbre de 10 a 15 sommets, dont chacun a un poids de -10 à 10
 		\param : None
 		\return : un arbre
-		\complex : n * complexité de randint (j'ai lu O(1) mais ??)
+		\complex : nombre de sommets * complexité de randint
 	"""
 	G=nx.Graph()
 	n_sommets = random.randint(10,15) #genere entre 10 et 15 sommets
 	for i in range(n_sommets):
-		G.add_node(i+1, weight = random.randint(-5,10)) #Cree un noeud aleatoire
+		G.add_node(i+1, weight = random.randint(-10,10)) #Cree un noeud aleatoire
 		if i != 0:
 			G.add_edge(random.randint(1, i), i+1) #Relie ce nouveau noeud (sauf le premier), aleatoirement parmi les precedents
 	return G
