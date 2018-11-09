@@ -5,7 +5,7 @@ import random
 def hierarchy_pos(G, root, decal = 0, width=1., vert_gap = 0.2, vert_loc = 0, xcenter = 0.5, pos = None, parent = None):
 	"""
 		\brief : Crée un dictionnaire servant à l'affichage de l'arbre, chaque noeud a une position x,y
-		\param : Le graphe en entier, un noeud
+		\param : Le graphe en entier, un noeud, le décallage servant à l'affichage
 		\return : Un dictionnaire
 		\complex : quid complexité .remove() ?
 	"""
@@ -49,9 +49,9 @@ def gen_hyper_graph():
 
 def reverse(hyper_graph,n_hyper_aretes):
 	"""
-		\brief:
-		\param:
-		\return:
+		\brief: Renvoi une liste où les sommets x,...,z sont reliés à l'hyper arête d'indice i
+		\param: une liste contenant l'hypergraph, le nombre d'hyper arête
+		\return: une liste
 		\complex: étant donné qu'on parcourt une seule fois la liste et qu'on place chaque sommet au bon endroit... O(nombre de sommets?)
 	"""
 	res = [[] for i in range(n_hyper_aretes)]
