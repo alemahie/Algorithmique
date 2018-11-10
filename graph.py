@@ -222,7 +222,7 @@ def BronKerboschl(R, P, X, primal, reversed_G, ok):
 	"""
 	if ok:
 		if len(P) == 0 and len(X) == 0:
-			print("Maximal Clique : ", R)
+			#print("Maximal Clique : ", R)
 			if len(R) >= 2 and R not in reversed_G:
 				ok = False
 		for i in P:
@@ -230,12 +230,11 @@ def BronKerboschl(R, P, X, primal, reversed_G, ok):
 				R.append(i)
 				R.sort()
 			voisins_de_v = voisins(primal, i)
-			new_P = []				#P n N(v)
-			for j in P:
+			new_P, new_X = [], []				
+			for j in P:				#P n N(v)
 				if j in voisins_de_v:
-					new_P.append(j)
-			new_X = []				#X n N(v)
-			for j in X:
+					new_P.append(j)			
+			for j in X:				#X n N(v)
 				if j in voisins_de_v:
 					new_X.append(j)
 			ok = BronKerboschl(R, new_P, new_X, primal, reversed_G, ok)
@@ -249,15 +248,40 @@ def BronKerboschl(R, P, X, primal, reversed_G, ok):
 	
 	
 
-def test_hypertree(hyper_graph):
+def test_hypertree(hyper_graph, n_sommets, n_hyper_aretes):
 	"""
-	Test hypertree
+	Test si l'hyper-graphe est un hyper-arbre.
 	"""
-	print("coucou")
+	reversed_hyper_graph = reverse(hyper_graph, n_hyper_aretes)
+	primal = primal_graph(reversed_hyper_graph)
+
+	bfs = breadth_first_search(n_sommets, primal)
+	verify_cordal = cordal(primal, bfs)
+
+	verify_max_cliques = BronKerboschl([], [i+1 for i in range(n_sommets)], [], primal, reversed_hyper_graph, True)
+
+	print("Vérification graphe cordal : ", verify_cordal)
+	print("Vérification cliques maximales sont des hyper-arêtes : ", verify_max_cliques)
+	
+	if verify_cordal and verify_max_cliques:
+		print("L'hyper-graphe est un hyper-arbre.")
+	else:
+		print("L'hyper-graphe n'est pas un hyper-arbre.")
+	
+	for i in range(len(reversed_hyper_graph)):
+		draw_hyper_arete(i,reversed_hyper_graph[i])	
+	plt.show()
+	
 	
 	
 def launch():
+	"""
+	Génère un hyper-graphe aléatoire et en déduit si c'est un hyper-arbre ou non.
+	"""
+	
+	print("\n\n	Hyper-graphe :")
 	hyper_graph, n_sommets, n_hyper_aretes = gen_hyper_graph()
+	test_hypertree(hyper_graph, n_sommets, n_hyper_aretes)
 	
 	"""
 			#Hyper_graph test, est un hyper_tree.
@@ -270,37 +294,3 @@ def launch():
 	n_sommets = 7
 	n_hyper_aretes = 4
 	"""
-	
-	reversed_hyper_graph = reverse(hyper_graph, n_hyper_aretes)
-	primal = primal_graph(reversed_hyper_graph)
-	
-	print("Nombre sommets : ", n_sommets)
-	print("Nombre d'hyper arêtes : ", n_hyper_aretes)
-	print("Par sommets : ", hyper_graph)
-	print("Par hyper aretes : ", reversed_hyper_graph)
-	print("Primal ; ", primal)
-	
-	"""
-	G, pos = incidence_graph(hyper_graph, n_sommets, n_hyper_aretes)
-	nx.draw(G, pos=pos, with_labels=False)
-	node_labels = nx.get_node_attributes(G,'number')
-	nx.draw_networkx_labels(G, pos, labels = node_labels) #affiche les poids a la place des noms
-	"""
-	
-	bfs = breadth_first_search(n_sommets, primal)
-	verify_cordal = cordal(primal, bfs)
-
-	verify_max_cliques = BronKerboschl([], [i+1 for i in range(n_sommets)], [], primal, reversed_hyper_graph, True)
-
-	print("\n\n\n\nVerify cordal : ", verify_cordal)
-	print("Verify max cliques : ", verify_max_cliques)
-	
-	if verify_cordal and verify_max_cliques:
-		print("L'hyper-graphe est un hyper-arbre.")
-	else:
-		print("L'hyper-graphe n'est pas un hyper-arbre.")
-	
-	
-	for i in range(len(reversed_hyper_graph)):
-		draw_hyper_arete(i,reversed_hyper_graph[i])	
-	plt.show()

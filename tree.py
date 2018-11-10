@@ -4,9 +4,9 @@ import random
 
 def hierarchy_pos(G, root, second = False, width=1., vert_gap = 0.2, vert_loc = 0, xcenter = 0.5, pos = None, parent = None):
 	"""
-		\brief : Crée un dictionnaire servant à l'affichage de l'arbre, chaque noeud a une position x,y
-		\param : Le graphe en entier, un noeud
-		\return : Un dictionnaire
+		\brief : Crée un dictionnaire servant à l'affichage de l'arbre, chaque noeud a une position x,y.
+		\param : G, le graphe entier; root, un noeud pris comme racine.
+		\return : Un dictionnaire de postions des noeuds.
 		\complex : quid complexité .remove() ?
 	"""
 	#ajuste le décalage si on est dans le second arbre
@@ -31,10 +31,10 @@ def hierarchy_pos(G, root, second = False, width=1., vert_gap = 0.2, vert_loc = 
 
 def gen_tree():
 	"""
-		\brief : cree un arbre de 10 a 15 sommets, dont chacun a un poids de -10 à 10
-		\param : None
-		\return : un arbre
-		\complex : nombre de sommets * complexité de randint
+		\brief : Créé un arbre aléatoire de 10 à 15 sommets, dont chacun a un poids de -10 à 10.
+		\param : None.
+		\return : Un arbre aléatoire.
+		\complex : O(nombre de sommets * complexité de randint)
 	"""
 	G=nx.Graph()
 	n_sommets = random.randint(10,15) #genere entre 10 et 15 sommets
@@ -48,9 +48,9 @@ def gen_tree():
 
 def delete_node(G,N):
 	"""
-		\brief : supprime un noeud et tous ses voisins sauf son père. Si c'est une feuille, supprme uniquement la feuille
-		\param : l'arbre, un noeud
-		\return : l'arbre amputé du noeud et de ses éventuels fils
+		\brief : Supprime un noeud et tous ses voisins sauf son père. Si c'est une feuille, supprime uniquement la feuille.
+		\param : G, l'arbre; N, un noeud depuis lequel il faut supprimer.
+		\return : L'arbre amputé du noeud et de ses éventuels fils.
 		\complex : 
 	"""
 	fils = list(G.neighbors(N))[1:]
@@ -63,9 +63,10 @@ def delete_node(G,N):
 
 def sous_somme(voisins, somme_des_fils, dec):
 	"""
-		\brief : somme les valeurs des fils afin d'avoir la valeur totale du sous-arbre
-		\param : liste des voisins, dictionnaire de tous les noeuds, décalage (0 si racine, 1 sinon)
-		\return : la somme calculée
+		\brief : Somme les valeurs des fils afin d'avoir la valeur totale du sous-arbre.
+		\param : voisins, une liste des voisins du noeud; somme_des_fils, un dictionnaire contenant la somme des fils de tous les noeuds;
+				 dec, un décalage (0 si racine, 1 sinon)
+		\return : La somme calculée
 		\complex : O(nombre de voisins)
 	"""
 	somme = 0
@@ -77,9 +78,10 @@ def sous_somme(voisins, somme_des_fils, dec):
 
 def reduc_tree(i, node_labels, somme_des_fils, G):
 	"""
-		\brief :
-		\param :
-		\return :
+		\brief : Réduit l'arbre donné afin de calculer le sous-arbre dont la somme des noeuds est maximale.
+		\param : i, le numéro du noeud d'où l'on part; node_labels, un dictionnaire contenant la valeur de tous les noeuds;
+				 somme_des_fils, un dictionnaire contenant la somme des fils de tous les noeuds; G, l'arbre en question.
+		\return : Un arbre sous-tendant maximum.
 		\complex :
 	"""
 	voisins = list(G.neighbors(i))
@@ -118,19 +120,19 @@ def reduc_tree(i, node_labels, somme_des_fils, G):
 	return G
 	
 	
-
-##########################################################################################################
-  
-
+	
 def max_subtree():
-	#arbre initial
+	"""
+	Génère un arbre aléatoire et calcule sont arbre sous-tendant maximum.
+	"""
+		#arbre initial
 	G = gen_tree()
 	pos = hierarchy_pos(G,1)
 	nx.draw(G, pos=pos, with_labels=False)
 	node_labels = nx.get_node_attributes(G,'weight')
 	nx.draw_networkx_labels(G, pos, labels = node_labels) #affiche les poids a la place des noms
 
-	#arbre recoupé
+		#arbre recoupé
 	G = reduc_tree(1, node_labels, {}, G) # REDUCTION DE L'ARBRE
 	pos = hierarchy_pos(G,1,True)
 	nx.draw(G, pos=pos, with_labels=False)
