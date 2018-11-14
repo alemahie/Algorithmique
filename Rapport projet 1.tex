@@ -32,6 +32,7 @@ Tristan \bsc{Philips}, 425461}
 \section{Choix des librairies utilisées}
 Par soucis de facilité, nous avons décidé d'utiliser les librairies Networkx et Matplotlib. L'une servant servant à créer l'arbre, composés de ses différents noeuds, l'autre à l'afficher. La librairie random a bien évidemment été utilisée afin de générer des arbres aléatoires de manière à pouvoir tester une multitude de cas différents.
 \\Pour optimiser la présentation de l'arbre, nous avons utilisé une fonction trouvée sur internet \cite{hierarchypos}, qui a ensuite été modifiée partiellement par nos soins. Celle-ci renvoie un dictionnaire où chaque noeud à une position x et y associée.
+\\Il est à noter que nous avons utilisé la méthode get\_node\_attribute (et par extension le fait que l'on puisse donner des attributs à chaque noeud) de la libraire Networkx pour afficher directement le poids des sommets dans notre graphique. En effet, les noms n'ont aucune espèce d'importance dans le cadre de ce projet.
 \section{Choix d'implémentation faits et fonctionnement du programme}
 Afin d'éliminer au fur et à mesure les feuilles et sous arbres contribuant à faire baisser le poids total de l'arbre, il nous a semblé évident d'effectuer un parcourt en post ordre. Un tel chemin consiste à parcourir les fils de gauche à droite, puis le père. Il est ainsi aisé de visiter toutes les feuilles, d'éliminer celles ayant un poids négatif et d'ensuite aditionner le poids des feuilles restantes (qui sont positifs donc) au poids du père. Si l'ensemble est positif, on laisse tel quel et on le considère dans la suite du code comme étant une simple feuille dont le poids correspond à la somme du poids ses feuilles et de lui même. Si l'ensemble est négatif, on élimine le noeud ainsi que tous ses fils. On fait ceci de manière récursive sur l'ensemble des l'arbre.
 \begin{figure}[!h]
@@ -40,11 +41,21 @@ Afin d'éliminer au fur et à mesure les feuilles et sous arbres contribuant à 
 \caption{Exemple d'un parcourt en post ordre \cite{postorder}}
 \end{center}
 \end{figure}
-\\En vue de générer un arbre non binaire, nous avons créé une fonction gen\_sommet, qui génère aléatoirement entre 10 et 15 sommets de poids allant de -5 à 10. Pour ce faire, à chaque itération de la boucle principale, le nouveau sommet se rattache alétoirement à un sommet déjà existant. Le deuxième à être créé se liera forcément avec le premier, mais le troisième sera, par exemple, soit le fils du second, soit le fils de la racine (et frère du second). Et ainsi de suite. Nous avons pas mis de condition à cette fonction, il se peut donc que des cas dégénérés (bien que rares) surviennent , tel qu'une racine avec 10 fils, une profondeur d'arbre de 10, ect...
-\\on explique gen sommet et aux autres fonctions vite fait bien fait
+\\En vue de créer un arbre non binaire, nous avons implémenté une fonction gen\_sommet, qui génère aléatoirement entre 10 et 15 sommets de poids allant de -10 à 10. Pour ce faire, à chaque itération de la boucle principale, un nouveau sommet se rattache alétoirement à un sommet déjà existant. Le deuxième à être créé se liera forcément avec le premier, mais le troisième sera, par exemple, soit le fils du second, soit le fils de la racine (et frère du second). Et ainsi de suite. Nous avons pas mis de condition à cette fonction, il se peut donc que des cas dégénérés (bien que rares) surviennent, telle qu'une racine avec 10 fils, une profondeur d'arbre de 10, ect...
 \section{Complexité des fonctions importées et max\_subtree}
 \part{Graphes}
-\section{Section 1}
+\section{Choix des librairies utilisées}
+Tout comme pour la première partie de ce projet, nous avons utilisé les librairies networkx et Matplotlib. Nous n'en rejustieront donc ni l'utilité ni la complexité étant donné que tout cela a déjà été fait précédemment dans ce rapport. De même, la fonction \guillemotleft hierarchy position \cite{hierarchypos}\guillemotright~a de nouveau été utilisée afin d'afficher le graph dual (voir plus bas).
+\section{Génération du graph}
+\section{Vérification de l'hypertree}
+\section{Représentation du graph dual}
+Il était demandé d'afficher à l'écran le graph dual de la façon que l'on jugeait la plus simple. Pour ce faire, nous avons décidé de représenter notre graphique en tant que plusieurs arbre de hauteur 1. La racine de chaque arbre correspond à une hyper arrête et tous ses fils sont les sommets qu'elle relie. L'affichage est certes, bien moins élégant que celui proposé dans l'énoncé, mais nous trouvions que celui-ci était tout aussi clair et donnait autant d'informations.
+\begin{figure}[!h]
+\begin{center}
+\includegraphics[scale=0.6]{dualgraph.png}
+\caption{Exemple d'affichage d'un graph dual}
+\end{center}
+\end{figure}
 \part{Conclusion}
 \section{about Random}
 
