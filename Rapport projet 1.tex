@@ -47,7 +47,34 @@ Afin d'éliminer au fur et à mesure les feuilles et sous arbres contribuant à 
 \section{Choix des librairies utilisées}
 Tout comme pour la première partie de ce projet, nous avons utilisé les librairies networkx et Matplotlib. Nous n'en rejustieront donc ni l'utilité ni la complexité étant donné que tout cela a déjà été fait précédemment dans ce rapport. De même, la fonction \guillemotleft hierarchy position \cite{hierarchypos}\guillemotright~a de nouveau été utilisée afin d'afficher le graph dual (voir plus bas).
 \section{Génération du graph}
+
 \section{Vérification de l'hypertree}
+
+Afin de vérifier qu’un hypergraphe soit un hyperarbre, il faut prouver que son hypergraphe dual est lui-même 
+\alpha -acyclique. 
+
+Pour prouver cela il faut montrer que le graphe primal de notre hypergraphe est cordal et que toute clique maximale est une hyper-arête dans l’hypergraphe.
+Il nous faut donc tout d’abord des fonctions créant l’hypergraphe dual ainsi que le graphe primal.
+
+\\D'une part, le principe utilisé pour montrer que le graphe primal est cordal, est le principe d’ordonnancement d’élimination parfaite, en effet un graphe est cordal s’il possède un tel ordonnancement.
+Pour cela, selon Rose, Lueker & Tarjan (1976), la cordialité d’un graphe peut être vérifiée efficacement grâce au principe de recherche lexicographique en largeur (LexBFS). [2]
+
+\\Il faut donc tout d’abord réaliser une recherche lexicographique en largeur qui est un algorithme produisant une liste ordonnée de l’ensemble des sommets du graphe.
+
+\\Cet algorithme fonctionne comme suit : Tout d'abord, nous créons une liste contenant une autre liste dans laquelle il y a tous les sommets, c'est notre premier ensemble. A chaque itération, le premier sommet du premier ensemble est choisi. Ensuite nous cherchons chaque sommet voisin avec le sommet choisi et ceux-ci sont placés dans un nouvel ensemble précédant le premier. L’algorithme poursuit ainsi jusqu’à ce que l’entièreté des sommets soient traités.
+\\Par après il faut vérifier que cet ordonnancement est d’élimination parfaite. Pour cela nous choisissons un sommet "v" dans la liste ordonnée, si tous ses voisins qui le précèdent dans cette même liste forment une clique, alors le graphe est cordal. Si à un moment ces sommets ne forment pas de clique, le graphe n’est pas cordal.
+
+\\D'autre part, l’algorithme de Bron-Kerbosch [3] va nous permettre de prouver que pour chaque clique maximale du graphe corresponde une hyper-arête dans l’hypergraphe, et donc ainsi de prouver que le l'hypergraphe est un hyperarbre. (Si la cordialité est vérifié comme dit précédemment.)
+Cet algorithme va chercher, grâce à un backtracking récursif, l’ensemble des cliques maximales du graphe.
+A chaque fois qu’une clique est trouvée, nous vérifions si effectivement elle correspond à l’une des hyperarêtes de l’hypergraphe (l’hypergraphe dual en occurrence nous donne directement les informations dont nous avons besoin). Si ce n’est pas le cas l’algorithme s’arrête et renvoie un résultat erroné, sinon il continue jusqu’à la fin de l’exécution de l’algorithme.
+
+\\Si ces deux parties sont vérifiées, alors notre hypergraphe est bien un hyperarbre.
+
+
+[1]	https://en.wikipedia.org/wiki/Chordal_graph
+[2]	https://en.wikipedia.org/wiki/Lexicographic_breadth-first_search 
+[3]	https://en.wikipedia.org/wiki/Bron%E2%80%93Kerbosch_algorithm
+
 \section{Représentation du graph dual}
 Il était demandé d'afficher à l'écran le graph dual de la façon que l'on jugeait la plus simple. Pour ce faire, nous avons décidé de représenter notre graphique en tant que plusieurs arbre de hauteur 1. La racine de chaque arbre correspond à une hyper arrête et tous ses fils sont les sommets qu'elle relie. L'affichage est certes, bien moins élégant que celui proposé dans l'énoncé, mais nous trouvions que celui-ci était tout aussi clair et donnait autant d'informations.
 \begin{figure}[!h]
@@ -56,6 +83,7 @@ Il était demandé d'afficher à l'écran le graph dual de la façon que l'on ju
 \caption{Exemple d'affichage d'un graph dual}
 \end{center}
 \end{figure}
+
 \part{Conclusion}
 \section{about Random}
 
