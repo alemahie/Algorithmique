@@ -1,3 +1,10 @@
+"""
+algo2_2018.py
+
+Lemahieu Antoine - 457582
+Philips Tristan - 425461
+"""
+
 import tree
 import graph
 import networkx as nx

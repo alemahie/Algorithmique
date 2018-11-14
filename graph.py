@@ -1,3 +1,10 @@
+"""
+graph.py
+
+Lemahieu Antoine - 457582
+Philips Tristan - 425461
+"""
+
 import matplotlib.pyplot as plt
 import networkx as nx
 import random
